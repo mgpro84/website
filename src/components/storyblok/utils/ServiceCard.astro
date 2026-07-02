@@ -1,0 +1,50 @@
+---
+// Assets
+import { Image } from "astro:assets"
+// Fundations
+import Text from "../../elements/Text.astro"
+import UnderlinedLink from "../../elements/UnderlinedLink.astro"
+import RichText from "../../elements/RichText.astro"
+
+// Content
+const { title, description, url, image } = {
+  url: Astro.props.service.url.id ? Astro.props.service.url.url : null,
+  title: Astro.props.service.title,
+  description: Astro.props.service.description,
+  image: Astro.props.service.image.id
+    ? Astro.props.service.image.filename
+    : null
+}
+---
+
+<article>
+  <Image
+    src={image}
+    alt={title}
+    width={800}
+    height={700}
+    loading="lazy"
+    decoding="async"
+    class="object-cover object-center w-full max-w-16 h-auto"
+  />
+  <div class="mt-4">
+    <Text tag="h3" variant="textXL" class="font-medium text-accent-900">
+      {title}
+    </Text>
+    <div class="text-base-600 mt-1 line-clamp-2">
+      <RichText content={description} />
+    </div>
+    {
+      url && (
+        <UnderlinedLink
+          href={url}
+          variant="dark"
+          title={`View service: ${title}`}
+          aria-label={`View service: ${title}`}
+          class="mt-4">
+          En savoir +
+        </UnderlinedLink>
+      )
+    }
+  </div>
+</article>

@@ -1,2 +1,11 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@layer utilities {
+  .prosed-white {
+    @apply prose prose-headings:text-white prose-a:text-white text-white max-w-[70ch];
+  }
+  .prosed-black {
+    @apply prose prose-headings:text-black prose-a:text-black text-black;
+  }
+}

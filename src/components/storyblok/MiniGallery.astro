@@ -1,0 +1,32 @@
+---
+import Wrapper from "../containers/Wrapper.astro"
+import RichText from "../elements/RichText.astro"
+import { Image } from "astro:assets"
+
+import { storyblokEditable } from "@storyblok/astro"
+const { blok } = Astro.props
+---
+
+<section class="pb-16" {...storyblokEditable(blok)}>
+  <Wrapper variant="standard" class="max-w-none">
+    <div class="prosed-black mx-auto">
+      <RichText content={blok.content} />
+    </div>
+  </Wrapper>
+
+  <ul class="flex flex-wrap justify-center items-center gap-8 mt-4 lg:mt-8">
+    {
+      blok.gallery.map((image) => (
+        <li>
+          <Image
+            src={image.filename}
+            alt={image.alt || ""}
+            layout="constrained"
+            inferSize
+            class="w-32 h-32 object-cover"
+          />
+        </li>
+      ))
+    }
+  </ul>
+</section>

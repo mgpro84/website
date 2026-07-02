@@ -1,0 +1,29 @@
+---
+// Storyblok
+import { useStoryblokApi } from "@storyblok/astro"
+import { Image } from "astro:assets"
+const storyblokApi = useStoryblokApi()
+
+let logo
+try {
+  const { data } = await storyblokApi.get(`cdn/stories/global`, {
+    version: import.meta.env.IS_PREVIEW ? "draft" : "published",
+    token: import.meta.env.DELIVERY_API_TOKEN
+  })
+  logo = data.story.content.logo
+} catch (error: unknown) {
+  console.error("[DEBUG] Storyblok API error:", error.message)
+  console.log(error)
+}
+
+const { class: className } = Astro.props
+const classes = `my-0 ${className}`
+---
+
+<Image
+  src={logo.filename}
+  alt="Logo"
+  inferSize
+  layout="constrained"
+  class={classes}
+/>

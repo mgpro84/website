@@ -1,0 +1,71 @@
+---
+import { Image } from "astro:assets"
+import Wrapper from "../containers/Wrapper.astro"
+import Text from "../elements/Text.astro"
+import RichText from "../elements/RichText.astro"
+import Button from "./utils/Button.astro"
+
+import { storyblokEditable } from "@storyblok/astro"
+
+const { blok } = Astro.props
+---
+
+<section
+  class="relative min-h-[80dvh] flex flex-col"
+  {...storyblokEditable(blok)}>
+  <div class="absolute inset-0 z-0">
+    {
+      blok.image.filename && (
+        <Image
+          src={blok.image.filename}
+          alt={blok.image.alt}
+          inferSize
+          layout="full-width"
+          class="size-full object-cover"
+        />
+      )
+    }
+    <div
+      aria-hidden="true"
+      class="absolute pointer-events-none inset-0 bg-sky-950/60">
+    </div>
+  </div>
+  <div class="relative z-10 flex-1 flex flex-col">
+    <Wrapper
+      variant="standard"
+      class="flex-1 flex flex-col justify-end py-12 lg:pb-12 pt-24 lg:border-x lg:border-white/10">
+      <div class="max-w-xl text-balance p-4 prosed-white">
+        <RichText content={blok.text} />
+      </div>
+    </Wrapper>
+    <div class="relative z-10 border-t border-white/10">
+      <Wrapper variant="standard" class="py-8 lg:border-x lg:border-white/10">
+        <div
+          class="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-8 lg:max-w-3xl lg:ml-auto justify-self-end">
+          {
+            blok.stats.map((stat) => {
+              if (stat.component === "stat") {
+                return (
+                  <div>
+                    <Text
+                      tag="p"
+                      variant="displayLG"
+                      class="text-white italic font-medium">
+                      {stat.value}
+                    </Text>
+                    <Text tag="p" variant="textSM" class="text-white mt-1">
+                      {stat.label}
+                    </Text>
+                  </div>
+                )
+              }
+              if (stat.component === "button") {
+                return <Button blok={stat} />
+              }
+            })
+          }
+        </div>
+      </Wrapper>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,25 @@
+---
+import Logo from "../elements/Logo.astro"
+import Wrapper from "../containers/Wrapper.astro"
+import RichText from "../elements/RichText.astro"
+
+import { storyblokEditable } from "@storyblok/astro"
+const { blok } = Astro.props
+---
+
+<section
+  class="bg-sky-950 relative overflow-hidden"
+  {...storyblokEditable(blok)}>
+  <Wrapper
+    variant="standard"
+    class="py-12 lg:py-24 lg:border-x lg:border-white/10">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div class="prosed-white">
+        <Logo />
+      </div>
+      <div class="lg:col-span-2 text-pretty prosed-white">
+        <RichText content={blok.content} />
+      </div>
+    </div>
+  </Wrapper>
+</section>

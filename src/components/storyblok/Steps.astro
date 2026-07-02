@@ -1,0 +1,36 @@
+---
+import Wrapper from "../containers/Wrapper.astro"
+import RichText from "../elements/RichText.astro"
+
+import { storyblokEditable } from "@storyblok/astro"
+const { blok } = Astro.props
+---
+
+<section class="" {...storyblokEditable(blok)}>
+  <div class="prosed-black max-w-xl mx-auto text-center py-12">
+    <RichText content={blok.intro} />
+  </div>
+  <div class="relative max-w-[90vw] lg:max-w-3xl mx-auto mt-12">
+    <div
+      data-orientation="vertical"
+      class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-background absolute left-2 top-0">
+    </div>
+    <div class="relative mx-auto space-y-4">
+      {
+        blok.steps.map((step, index) => (
+          <div class="relative pl-8">
+            <div class="absolute top-0 flex items-center justify-center rounded-full bg-background -left-2 size-4">
+              <span class="text-sm font-medium text-foreground text-black">
+                {" "}
+                {index + 1}{" "}
+              </span>
+            </div>
+            <div class="p-2 ml-8 shadow bg-linear-180 outline outline-border from-muted to-background rounded-xl prosed-black">
+              <RichText content={step.content} />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

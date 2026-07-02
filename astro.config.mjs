@@ -1,5 +1,4 @@
 // @ts-check
-// TODO View .env
 import { defineConfig, passthroughImageService } from 'astro/config';
 import { loadEnv } from "vite";
 
@@ -28,10 +27,19 @@ export default defineConfig({
         region: 'eu',
       },
       components: {
-        page: "components/storyblok/Page"
+        page: "components/storyblok/utils/Page",
+        hero: "components/storyblok/Hero",
+        intro: "components/storyblok/Intro",
+        button: "components/storyblok/utils/Button",
+        services: "components/storyblok/Services",
+        cta: "components/storyblok/CTA",
+        imagetext: "components/storyblok/ImageText",
+        minigallery: "components/storyblok/MiniGallery",
+        logobanner: "components/storyblok/LogoBanner",
+        steps: "components/storyblok/Steps",
       },
       enableFallbackComponent: true,
-      customFallbackComponent: "components/storyblok/Fallback",
+      customFallbackComponent: "components/storyblok/utils/Fallback",
       bridge: true,
     }),sitemap(), favicons()],
 
