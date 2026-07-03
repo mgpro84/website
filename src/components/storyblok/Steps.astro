@@ -1,36 +1,93 @@
 ---
-import Wrapper from "../containers/Wrapper.astro"
 import RichText from "../elements/RichText.astro"
 
 import { storyblokEditable } from "@storyblok/astro"
+
 const { blok } = Astro.props
 ---
 
-<section class="" {...storyblokEditable(blok)}>
-  <div class="prosed-black max-w-xl mx-auto text-center py-12">
-    <RichText content={blok.intro} />
-  </div>
-  <div class="relative max-w-[90vw] lg:max-w-3xl mx-auto mt-12">
-    <div
-      data-orientation="vertical"
-      class="shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px bg-background absolute left-2 top-0">
-    </div>
-    <div class="relative mx-auto space-y-4">
-      {
-        blok.steps.map((step, index) => (
-          <div class="relative pl-8">
-            <div class="absolute top-0 flex items-center justify-center rounded-full bg-background -left-2 size-4">
-              <span class="text-sm font-medium text-foreground text-black">
-                {" "}
-                {index + 1}{" "}
+<section
+  class="max-w-container-max mx-auto px-margin-desktop mb-section-gap text-center"
+  {...storyblokEditable(blok)}>
+  {
+    blok.tagline && (
+      <span class="font-label-caps text-label-caps text-sky-accent mb-4 block uppercase tracking-widest">
+        {blok.tagline}
+      </span>
+    )
+  }
+  {
+    blok.title && (
+      <h2 class="font-display-lg text-display-lg text-deep-navy mb-6">
+        {blok.title}
+      </h2>
+    )
+  }
+  {
+    blok.description && (
+      <div class="font-body-lg text-body-lg text-text-main/70 max-w-3xl mx-auto">
+        <RichText content={blok.description} />
+      </div>
+    )
+  }
+  {
+    blok.subtitle && (
+      <h3 class="mt-16 text-left font-headline-lg text-headline-lg text-deep-navy mb-4">
+        {blok.subtitle}
+      </h3>
+    )
+  }
+  {
+    blok.steps.length < 5 && (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+        {blok.steps.map((step) => (
+          <div class="step-card bg-white p-8 border border-surface-variant relative overflow-hidden group">
+            <div class="w-12 h-12 bg-sky-accent/10 rounded-full flex items-center justify-center mb-6">
+              <span class="material-symbols-outlined text-sky-accent">
+                {step.icon}
               </span>
             </div>
-            <div class="p-2 ml-8 shadow bg-linear-180 outline outline-border from-muted to-background rounded-xl prosed-black">
+            <h4 class="font-headline-md text-headline-md text-deep-navy mb-3">
+              {step.title}
+            </h4>
+            <div class="font-body-md text-text-main/70">
               <RichText content={step.content} />
             </div>
           </div>
-        ))
-      }
-    </div>
-  </div>
+        ))}
+      </div>
+    )
+  }
+  {
+    blok.steps.length >= 5 && (
+      <div class="space-y-12 relative max-w-2xl mx-auto">
+        {blok.steps.map((step, index) => (
+          <div
+            class={`flex flex-col ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-base lg:gap-16`}>
+            <div
+              class={`w-full ${index % 2 === 0 ? "lg:mr-auto" : "lg:ml-auto"} lg:max-w-md`}>
+              <h4 class="font-headline-md text-headline-md text-deep-navy mb-3 text-left">
+                <span class="font-label-caps text-sky-accent mb-2">
+                  {index + 1 < 10 ? `0${index + 1}` : index + 1}
+                </span>
+                {step.title}
+              </h4>
+              <div class="text-text-main/70 max-w-2xl mx-auto text-left">
+                <RichText content={step.content} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+  {
+    blok.href && (
+      <a
+        class="mt-16 inline-block bg-caution-gold text-primary font-button px-10 py-4 rounded-lg hover:scale-105 transition-transform shadow-xl uppercase tracking-wider"
+        href={blok.href.url}>
+        {blok.btnname}
+      </a>
+    )
+  }
 </section>

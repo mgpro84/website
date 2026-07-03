@@ -1,31 +1,48 @@
 ---
-import Wrapper from "../containers/Wrapper.astro"
 import RichText from "../elements/RichText.astro"
 import { Image } from "astro:assets"
 
 import { storyblokEditable } from "@storyblok/astro"
+
 const { blok } = Astro.props
 ---
 
 <section
-  class="bg-sky-950 relative overflow-hidden"
+  class="py-section-gap bg-white overflow-hidden zigzag"
   {...storyblokEditable(blok)}>
-  <Wrapper
-    variant="standard"
-    class="py-12 lg:py-24 lg:border-x lg:border-white/10">
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-      <div class="prosed-white">
-        <Image
-          src={blok.image.filename}
-          alt={blok.image.alt}
-          layout="constrained"
-          inferSize
-          class="object-cover object-center w-full"
-        />
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="layout flex flex-col items-center gap-16">
+      <div class="lg:w-1/2 space-y-6">
+        <span
+          class="font-label-caps text-sky-accent uppercase tracking-widest block">
+          {blok.tagline}
+        </span>
+        <h2
+          class="font-headline-lg text-headline-lg text-deep-navy leading-tight">
+          {blok.title}
+        </h2>
+        <div class="space-y-4 text-on-surface-variant font-body-lg">
+          <RichText content={blok.content} />
+        </div>
       </div>
-      <div class="lg:col-span-2 text-pretty prosed-white">
-        <RichText content={blok.content} />
+      <div class="lg:w-1/2 relative">
+        <div
+          class="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-8 border-surface-container">
+          <Image
+            src={blok.image.filename}
+            alt={blok.image.alt}
+            inferSize
+            layout="constrained"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div
+          class="absolute -top-6 -right-6 w-32 h-32 bg-sky-accent/10 rounded-full -z-0">
+        </div>
+        <div
+          class="absolute -bottom-6 -left-6 w-24 h-24 bg-caution-gold/20 rounded-lg -z-0">
+        </div>
       </div>
     </div>
-  </Wrapper>
+  </div>
 </section>

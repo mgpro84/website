@@ -1,0 +1,80 @@
+---
+import RichText from "../elements/RichText.astro"
+import Button from "./utils/Button.astro"
+
+import { storyblokEditable } from "@storyblok/astro"
+
+const { blok } = Astro.props
+---
+
+<section class="py-section-gap bg-white" {...storyblokEditable(blok)}>
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      {
+        blok.values.map((value) => {
+          if (value.style === "soft") {
+            return (
+              <div class="p-8 border border-outline-variant rounded-xl bg-caution-gold/10 flex items-center justify-center text-center">
+                <div class="">
+                  <h3 class="font-label-caps text-deep-navy block mb-2">
+                    {value.title}
+                  </h3>
+                  <div class="font-headline-md text-headline-md text-deep-navy">
+                    <RichText content={value.description} />
+                  </div>
+                </div>
+              </div>
+            )
+          } else {
+            return (
+              <div class={`p-8 ${value.style}`}>
+                <span class="material-symbols-outlined">{value.icon}</span>
+                <h3>{value.title}</h3>
+                <div>
+                  <RichText content={value.description} />
+                </div>
+              </div>
+            )
+          }
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  @reference '../../styles/global.css';
+
+  .muted {
+    @apply border border-outline-variant rounded-xl bg-surface-gray hover:shadow-lg transition-all;
+    & span {
+      @apply text-4xl text-sky-accent mb-4 block group-hover:scale-110 transition-transform;
+    }
+    & h3 {
+      @apply font-headline-md text-headline-md text-deep-navy mb-3;
+    }
+    & div {
+      @apply text-on-surface-variant;
+    }
+  }
+
+  .accent {
+    @apply bg-deep-navy text-white rounded-xl flex  flex-col gap-4;
+    & span {
+      @apply text-4xl text-sky-accent mb-4 block;
+    }
+    & h3 {
+      @apply font-headline-md text-headline-md mb-2;
+    }
+  }
+
+  .soft {
+    @apply border border-outline-variant rounded-xl bg-caution-gold/10 flex items-center justify-center text-center;
+    & span {
+      @apply font-label-caps text-deep-navy block mb-2;
+    }
+    & h3 {
+      @apply font-headline-md text-headline-md text-deep-navy;
+    }
+  }
+</style>

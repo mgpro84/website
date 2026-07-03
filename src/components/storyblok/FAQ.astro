@@ -1,0 +1,40 @@
+---
+import RichText from "../elements/RichText.astro"
+
+import { storyblokEditable } from "@storyblok/astro"
+
+const { blok } = Astro.props
+---
+
+<!-- FAQ Section -->
+<section class="py-section-gap bg-surface" {...storyblokEditable(blok)}>
+  <div class="max-w-3xl mx-auto px-margin-mobile md:px-0">
+    <div class="text-center mb-12">
+      <h2 class="font-headline-lg text-headline-lg text-deep-navy mb-4">
+        {blok.headline}
+      </h2>
+      <div class="text-text-main/70">
+        <RichText content={blok.subtitle} />
+      </div>
+    </div>
+    <div class="space-y-4">
+      {
+        blok.faq.map((item) => (
+          <details class="faq-accordion group bg-white border border-surface-variant rounded-xl overflow-hidden">
+            <summary class="flex items-center justify-between p-6 cursor-pointer list-none focus:outline-none">
+              <p class="font-headline-md text-deep-navy pr-4">
+                {item.question}
+              </p>
+              <span class="faq-icon material-symbols-outlined text-sky-accent group-open:rotate-180">
+                expand_more
+              </span>
+            </summary>
+            <div class="px-6 pb-6 text-text-main/70 space-y-4 prosed-black">
+              <RichText content={item.answer} />
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

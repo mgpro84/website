@@ -1,0 +1,30 @@
+---
+import { Image } from "astro:assets"
+
+import { storyblokEditable } from "@storyblok/astro"
+const { blok } = Astro.props
+---
+
+<section class="py-16" {...storyblokEditable(blok)}>
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <h2 class="text-center font-label-caps text-on-surface-variant mb-10">
+      {blok.headline}
+    </h2>
+    <div
+      class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all">
+      {
+        blok.logos.map((logo) => (
+          <div class="w-32 h-32 flex items-center justify-center">
+            <Image
+              src={logo.filename}
+              alt={logo.alt || " "}
+              layout="constrained"
+              inferSize
+              class="w-full h-full object-contain"
+            />
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
