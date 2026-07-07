@@ -1,4 +1,5 @@
 ---
+import { useStoryblokApi } from "@storyblok/astro"
 import Logo from "../../components/elements/Logo.astro"
 // Icons
 import Close from "../../components/elements/Close.astro"
@@ -8,19 +9,35 @@ import Wrapper from "../../components/containers/Wrapper.astro"
 // Components
 import MobileNavigation from "./MobileNavigation.astro"
 
-const navLinks = [
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" }
-]
+const storyblokApi = useStoryblokApi()
+
+let menu, rels
+try {
+  const { data } = await storyblokApi.get(`cdn/stories/global`, {
+    version: import.meta.env.IS_PREVIEW ? "draft" : "published",
+    token: import.meta.env.STORYBLOK_DELIVERY_API_TOKEN,
+    resolve_relations: "menu"
+  })
+  rels = data.rels
+  menu = data.story.content.menu
+} catch (error) {
+  console.error("[DEBUG] Storyblok API error:", error.message)
+}
+const menuSorted = menu.map((item) => {
+  const rel = rels.find((r) => r.uuid === item)
+  return {
+    name: rel.name,
+    full_slug: rel.full_slug === "home" ? "/" : `/${rel.full_slug}`
+  }
+})
 ---
 
 <nav
   class={`fixed w-full top-0 z-50 transition-colors duration-300 border-b border-white/10 `}
   data-nav
   data-swap="true">
-  <Wrapper variant="standard" class="relative lg:border-white/5">
-    <div class="py-4 grid grid-cols-2 lg:grid-cols-4 items-center">
+  <div class="relative lg:border-white/5">
+    <div class="px-8 py-4 grid grid-cols-2 lg:grid-cols-4 items-center">
       <a
         href="/"
         aria-label="Home"
@@ -32,12 +49,12 @@ const navLinks = [
       <div
         class="hidden lg:flex items-center justify-between gap-4 py-4 px-6 outline outline-white/10 rounded-full bg-white/5 backdrop-blur-sm lg:col-span-2 lg:col-start-3">
         {
-          navLinks.map((l) => (
+          menuSorted.map((l) => (
             <a
-              href={l.href}
+              href={l.full_slug}
               class={`text-md font-bold transition text-white`}
               data-primary-link>
-              {l.label}
+              {l.name}
             </a>
           ))
         }
@@ -48,7 +65,7 @@ const navLinks = [
         aria-controls="mobile-menu"
         aria-expanded="false"
         data-menu-button>
-        <span class="sr-only">Open main menu</span>
+        <span class="sr-only">Ouvrir le menu</span>
         <span
           class="block"
           style="display: var(--burger-display, block);"
@@ -64,8 +81,8 @@ const navLinks = [
       </button>
     </div>
     <!-- Mobile Menu -->
-    <MobileNavigation navLinks={navLinks} />
-  </Wrapper>
+    <MobileNavigation navLinks={menuSorted} />
+  </div>
   <script is:inline>
     window.addEventListener("DOMContentLoaded", () => {
       // Mobile menu toggle logic

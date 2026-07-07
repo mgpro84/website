@@ -1,0 +1,113 @@
+---
+import { Image } from "astro:assets"
+import mapzone from "../../../public/mapzone.png"
+import { storyblokEditable } from "@storyblok/astro"
+
+const { blok } = Astro.props
+---
+
+<section
+  class="py-section-gap bg-white border-t border-outline-variant"
+  {...storyblokEditable(blok)}>
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <!-- Left Column: Map Placeholder -->
+      <div
+        class="relative h-[450px] rounded-2xl overflow-hidden shadow-xl border border-outline-variant group">
+        <div
+          class="absolute inset-0 bg-surface-container flex items-center justify-center">
+          <!-- Simulated Map Background -->
+          <div class="absolute inset-0 opacity-50">
+            <Image
+              src={mapzone}
+              alt="Map Placeholder"
+              class="w-full h-full object-cover absolute inset-0 opacity-50"
+              layout="fullWidth"
+              inferSize
+            />
+          </div>
+          <!-- Map Marker -->
+          <div class="relative z-10 flex flex-col items-center">
+            <div
+              class="w-12 h-12 bg-sky-accent rounded-full flex items-center justify-center shadow-2xl animate-bounce">
+              <span class="material-symbols-outlined text-white text-3xl">
+                location_on
+              </span>
+            </div>
+            <div
+              class="mt-2 px-4 py-2 bg-deep-navy text-white text-xs font-bold rounded shadow-lg">
+              {blok.markername}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right Column: Contact & Zone -->
+      <div class="space-y-10">
+        <div>
+          <span class="font-label-caps text-sky-accent mb-2 block">
+            {blok.tagline}
+          </span>
+          <h2 class="font-headline-lg text-headline-lg text-deep-navy mb-6">
+            {blok.title}
+          </h2>
+          <div class="space-y-6">
+            {
+              blok.address && (
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-sky-accent">
+                    home_pin
+                  </span>
+                  <div>
+                    <p class="font-bold text-deep-navy">Siège social</p>
+                    <p class="text-on-surface-variant">{blok.address}</p>
+                  </div>
+                </div>
+              )
+            }
+
+            {
+              blok.phone && (
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-sky-accent">
+                    call
+                  </span>
+                  <div>
+                    <p class="font-bold text-deep-navy">Téléphone</p>
+                    <p class="text-on-surface-variant">{blok.phone}</p>
+                  </div>
+                </div>
+              )
+            }
+
+            {
+              blok.openings && (
+                <div class="flex items-start gap-4">
+                  <span class="material-symbols-outlined text-sky-accent">
+                    schedule
+                  </span>
+                  <div>
+                    <p class="font-bold text-deep-navy">Horaires d'ouverture</p>
+                    <p class="text-on-surface-variant">{blok.openings}</p>
+                  </div>
+                </div>
+              )
+            }
+          </div>
+        </div>
+        {
+          blok.zone && (
+            <div class="p-6 bg-surface-gray rounded-xl border-l-4 border-caution-gold">
+              <div class="flex items-center gap-3 mb-3">
+                <span class="material-symbols-outlined text-caution-gold">
+                  distance
+                </span>
+                <h4 class="font-bold text-deep-navy">Zone d'intervention</h4>
+              </div>
+              <p class="text-on-surface-variant leading-relaxed">{blok.zone}</p>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>

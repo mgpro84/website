@@ -1,13 +1,18 @@
 ---
 import ButtonUI from "../../elements/Button.astro"
 const { blok } = Astro.props
+
+console.log(blok)
 ---
 
 <ButtonUI
   isLink
   size={blok.size}
   variant={blok.variant}
-  href={blok.href.url}
+  href={blok.href.url ||
+    blok.href.cached_url ||
+    blok.href.story.full_slug ||
+    "#"}
   class="w-fit mt-8 not-prose">
   {blok.text}
 </ButtonUI>

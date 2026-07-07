@@ -1,6 +1,7 @@
 ---
 import RichText from "../elements/RichText.astro"
 import Button from "./utils/Button.astro"
+import { Image } from "astro:assets"
 
 import { storyblokEditable } from "@storyblok/astro"
 
@@ -10,15 +11,17 @@ const { blok } = Astro.props
 <section
   class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden"
   {...storyblokEditable(blok)}>
-  <div class="absolute inset-0 z-0">
-    <div
-      class="w-full h-full bg-cover bg-center brightness-50"
-      data-alt="A professional carpentry workshop with high-end machinery and natural sunlight streaming through large industrial windows, illuminating wood shavings on a polished floor. The atmosphere is clean and precise, with a focus on high-quality wood materials and craftsmanship. The lighting is bright and architectural, reflecting a premium renovation aesthetic with deep navy and cool gray accents."
-      style={`background-image: url("${blok.image.filename}");`}>
-    </div>
+  <div class="absolute inset-0 z-0 brightness-50">
+    <Image
+      class="w-full h-full object-cover"
+      src={blok.image.filename}
+      alt={blok.image.alt || " "}
+      layout="fullWidth"
+      inferSize
+    />
   </div>
   <div
-    class="relative z-10 w-full max-w-container-max mx-auto px-margin-desktop text-white">
+    class="relative z-10 w-full max-w-container-max mx-auto px-margin-desktop text-white pt-8">
     <div class="max-w-2xl">
       <span
         class="font-label-caps text-label-caps uppercase tracking-widest text-sky-accent mb-4 block">

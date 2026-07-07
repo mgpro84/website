@@ -85,7 +85,12 @@ const { blok } = Astro.props
     blok.href && (
       <a
         class="mt-16 inline-block bg-caution-gold text-primary font-button px-10 py-4 rounded-lg hover:scale-105 transition-transform shadow-xl uppercase tracking-wider"
-        href={blok.href.url}>
+        href={
+          blok.href.url ||
+          blok.href.cached_url ||
+          blok.href.story.full_slug ||
+          "#"
+        }>
         {blok.btnname}
       </a>
     )
