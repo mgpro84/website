@@ -40,11 +40,11 @@ const { blok } = Astro.props
   {
     blok.steps.length < 5 && (
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-        {blok.steps.map((step) => (
+        {blok.steps.map((step, index) => (
           <div class="step-card bg-white p-8 border border-surface-variant relative overflow-hidden group">
             <div class="w-12 h-12 bg-sky-accent/10 rounded-full flex items-center justify-center mb-6">
               <span class="material-symbols-outlined text-sky-accent">
-                {step.icon}
+                {step.icon || index + 1}
               </span>
             </div>
             <h4 class="font-headline-md text-headline-md text-deep-navy mb-3">
@@ -82,7 +82,7 @@ const { blok } = Astro.props
     )
   }
   {
-    blok.href && (
+    blok.href?.id && (
       <a
         class="mt-16 inline-block bg-caution-gold text-primary font-button px-10 py-4 rounded-lg hover:scale-105 transition-transform shadow-xl uppercase tracking-wider"
         href={

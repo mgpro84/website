@@ -6,6 +6,7 @@ import { storyblokEditable } from "@storyblok/astro"
 
 const { blok } = Astro.props
 const moreServices = blok.more.split(",").map((service) => service.trim())
+console.log(moreServices)
 ---
 
 <!-- Services Section -->
@@ -28,15 +29,18 @@ const moreServices = blok.more.split(",").map((service) => service.trim())
       {
         blok.servicecards.map((service) => (
           <div class="bg-white rounded-lg overflow-hidden border border-outline-variant group cursor-pointer shadow-sm hover:-translate-y-2 transition-transform">
-            <div class="h-48 overflow-hidden">
-              <Image
-                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                src={service.image.filename}
-                alt={service.image.alt || " "}
-                layout="constrained"
-                inferSize
-              />
-            </div>
+            {service.image?.filename && (
+              <div class="h-48 overflow-hidden">
+                <Image
+                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  src={service.image.filename}
+                  alt={service.image.alt || " "}
+                  layout="constrained"
+                  inferSize
+                />
+              </div>
+            )}
+
             <div class="p-6">
               <h3 class="font-headline-md text-headline-md text-deep-navy mb-2">
                 {service.title}
@@ -49,15 +53,16 @@ const moreServices = blok.more.split(",").map((service) => service.trim())
         ))
       }
     </div>
-    <div
-      class="mt-12 p-8 bg-deep-navy rounded-lg text-white flex flex-wrap gap-4 justify-center">
-      {
-        moreServices.map((service) => (
-          <span class="px-4 py-2 border border-sky-accent/30 rounded-full text-sm font-label-caps bg-sky-accent/10">
-            {service}
-          </span>
-        ))
-      }
-    </div>
+    {
+      moreServices.length > 1 && (
+        <div class="mt-12 p-8 bg-deep-navy rounded-lg text-white flex flex-wrap gap-4 justify-center">
+          {moreServices.map((service) => (
+            <span class="px-4 py-2 border border-sky-accent/30 rounded-full text-sm font-label-caps bg-sky-accent/10">
+              {service}
+            </span>
+          ))}
+        </div>
+      )
+    }
   </div>
 </section>
