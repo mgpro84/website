@@ -73,7 +73,11 @@ const { blok } = Astro.props
                   </span>
                   <div>
                     <p class="font-bold text-deep-navy">Téléphone</p>
-                    <p class="text-on-surface-variant">{blok.phone}</p>
+                    <a
+                      href={`tel:${blok.phone}`}
+                      class="text-on-surface-variant underline">
+                      {blok.phone}
+                    </a>
                   </div>
                 </div>
               )

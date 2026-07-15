@@ -38,6 +38,7 @@ export default defineConfig({
         values: "components/storyblok/Values",
         faq: "components/storyblok/FAQ",
         infomaps: "components/storyblok/InfoMap",
+        contact: "components/storyblok/Contact",
       },
       enableFallbackComponent: true,
       customFallbackComponent: "components/storyblok/utils/Fallback",

@@ -9,7 +9,7 @@ const { blok } = Astro.props
 ---
 
 <section
-  class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden"
+  class="relative min-h-[90vh] flex items-center py-20 overflow-hidden"
   {...storyblokEditable(blok)}>
   <div class="absolute inset-0 z-0 brightness-50">
     <Image
@@ -32,7 +32,7 @@ const { blok } = Astro.props
         {blok.headline}
       </h1>
       <div
-        class="font-body-lg text-body-lg mb-10 text-surface-container opacity-90 leading-relaxed">
+        class="font-body-lg text-body-lg mb-10 text-surface-container opacity-90 leading-relaxed prosed-white">
         <RichText content={blok.subtitle} />
       </div>
       <div class="flex flex-col sm:flex-row gap-gutter">

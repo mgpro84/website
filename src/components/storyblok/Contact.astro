@@ -1,0 +1,206 @@
+---
+import RichText from "../elements/RichText.astro"
+
+import { storyblokEditable } from "@storyblok/astro"
+
+const { blok } = Astro.props
+---
+
+<section
+  class="py-section-gap bg-deep-navy text-white"
+  id="contact"
+  {...storyblokEditable(blok)}>
+  <div class="max-w-container-max mx-auto px-margin-desktop">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+      <div>
+        {
+          blok.title && (
+            <h2 class="font-headline-lg text-headline-lg mb-6">{blok.title}</h2>
+          )
+        }
+        {
+          blok.description && (
+            <div class="opacity-80 mb-10 text-lg">
+              <RichText content={blok.description} />
+            </div>
+          )
+        }
+        <div class="space-y-6">
+          {
+            blok.address && (
+              <div class="flex items-start gap-4">
+                <span class="material-symbols-outlined text-sky-accent">
+                  home_pin
+                </span>
+                <div>
+                  <p class="font-bold text-white">Siège social</p>
+                  <p class="text-white">{blok.address}</p>
+                </div>
+              </div>
+            )
+          }
+          {
+            blok.phone && (
+              <div class="flex items-start gap-4">
+                <span class="material-symbols-outlined text-sky-accent">
+                  call
+                </span>
+                <div>
+                  <p class="font-bold text-white">Téléphone</p>
+                  <a href={`tel:${blok.phone}`} class="text-white underline">
+                    {blok.phone}
+                  </a>
+                </div>
+              </div>
+            )
+          }
+          {
+            blok.openings && (
+              <div class="flex items-start gap-4">
+                <span class="material-symbols-outlined text-sky-accent">
+                  schedule
+                </span>
+                <div>
+                  <p class="font-bold text-white">Horaires d'ouverture</p>
+                  <p class="text-white">{blok.openings}</p>
+                </div>
+              </div>
+            )
+          }
+          {
+            blok.zone && (
+              <div class="p-6 bg-surface-gray rounded-xl border-l-4 border-caution-gold">
+                <div class="flex items-center gap-3 mb-3">
+                  <span class="material-symbols-outlined text-caution-gold">
+                    distance
+                  </span>
+                  <h4 class="font-bold text-deep-navy">Zone d'intervention</h4>
+                </div>
+                <p class="text-on-surface-variant leading-relaxed">
+                  {blok.zone}
+                </p>
+              </div>
+            )
+          }
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-8 text-primary shadow-2xl">
+        <form id="contact-form" class="space-y-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label for="name" class="font-label-caps block mb-2">NOM*</label>
+              <input
+                name="name"
+                class="w-full p-3 rounded border border-outline focus:ring-2 focus:ring-sky-accent focus:border-sky-accent outline-none transition-all"
+                type="text"
+                required
+                placeholder="Jean Dupont"
+              />
+            </div>
+            <div>
+              <label for="phone" class="font-label-caps block mb-2">
+                TÉLÉPHONE*
+              </label>
+              <input
+                name="phone"
+                class="w-full p-3 rounded border border-outline focus:ring-2 focus:ring-sky-accent focus:border-sky-accent outline-none transition-all"
+                type="tel"
+                placeholder="0612345678"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="email" class="font-label-caps block mb-2">EMAIL*</label>
+            <input
+              name="email"
+              class="w-full p-3 rounded border border-outline focus:ring-2 focus:ring-sky-accent focus:border-sky-accent outline-none transition-all"
+              type="email"
+              required
+              placeholder="exemple@email.com"
+            />
+          </div>
+
+          <div>
+            <label for="message" class="font-label-caps block mb-2">
+              MESSAGE
+            </label>
+            <textarea
+              name="message"
+              class="w-full p-3 rounded border border-outline focus:ring-2 focus:ring-sky-accent focus:border-sky-accent outline-none transition-all"
+              rows="4"></textarea>
+          </div>
+          <button
+            class="w-full bg-caution-gold text-primary font-button py-4 rounded-lg hover:brightness-105 active:scale-95 transition-all"
+            type="submit">
+            ENVOYER MA DEMANDE
+          </button>
+          <p
+            id="contact-status"
+            class="text-sm mt-2"
+            role="status"
+            aria-live="polite">
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null
+  const status = document.getElementById("contact-status")
+
+  if (form && status) {
+    const button = form.querySelector<HTMLButtonElement>(
+      'button[type="submit"]'
+    )
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault()
+
+      if (!form.checkValidity()) {
+        form.reportValidity()
+        return
+      }
+
+      const data = new FormData(form)
+      const payload = {
+        name: (data.get("name") as string)?.trim(),
+        phone: (data.get("phone") as string)?.trim(),
+        email: (data.get("email") as string)?.trim(),
+        message: (data.get("message") as string)?.trim()
+      }
+
+      status.textContent = "Envoi en cours…"
+      status.className = "text-sm mt-2 text-on-surface-variant"
+      if (button) button.disabled = true
+
+      try {
+        const response = await fetch("/api/EmailNotif", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        })
+
+        const result = await response.json().catch(() => ({}))
+
+        if (response.ok) {
+          status.textContent =
+            "Merci ! Votre demande a bien été envoyée. Nous vous recontacterons rapidement."
+          status.className = "text-sm mt-2 text-green-600 font-bold"
+          form.reset()
+        } else {
+          status.textContent =
+            result.error || "Une erreur est survenue. Veuillez réessayer."
+          status.className = "text-sm mt-2 text-red-600 font-bold"
+        }
+      } catch {
+        status.textContent =
+          "Impossible d'envoyer votre demande. Vérifiez votre connexion et réessayez."
+        status.className = "text-sm mt-2 text-red-600 font-bold"
+      } finally {
+        if (button) button.disabled = false
+      }
+    })
+  }
+</script>
