@@ -13,7 +13,7 @@ function escapeHtml(value) {
     .replace(/'/g, "&#39;")
 }
 
-export async function POST({ request }) {
+export async function POST(request) {
   let data
   try {
     data = await request.json()
