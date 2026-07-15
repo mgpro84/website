@@ -1,7 +1,7 @@
 import { Resend } from "resend"
 
-const resend = new Resend(import.meta.env.RESEND_API)
-const TO = import.meta.env.RECIPIENT_EMAIL
+const resend = new Resend(process.env.RESEND_API)
+const TO = process.env.RECIPIENT_EMAIL
 
 // Escape user-provided values before interpolating into the HTML body
 function escapeHtml(value) {
